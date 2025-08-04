@@ -1,35 +1,35 @@
 const container = document.querySelector("#container");
 const button = document.querySelector(".sizeButton");
 
-let gridSize = 16 * 16;
+const containerWidth = 384;
 
 function makeGrid (gridSize) {
-    for (let i = gridSize; i > 0; i--) {
-        let tile = document.createElement("div");
-        tile.setAttribute("class", `tile ${i}`)
-        container.appendChild(tile);
+    const totalTiles = gridSize * gridSize;
+    const tileSize = containerWidth / gridSize;
 
+
+    for (let i = 0; i < totalTiles; i++) {
+        const tile = document.createElement("div");
+        tile.setAttribute("class", "tile")
+        tile.style.width = `${tileSize}px`;
+        tile.style.height = `${tileSize}px`;
+        tile.addEventListener("mouseover", () => (colorBlack(tile)));
+        container.appendChild(tile);
     }
 }
+
 function colorBlack(elem) {
-    const bgColor ="black";
-    elem.style.backgroundColor = bgColor;
+    elem.style.backgroundColor = "black";
 }
 
-let tiles = Array.from(document.querySelectorAll(".tile"));
-
-tiles.map(tile => tile.addEventListener("mouseover", () => (colorBlack(tile))));
-
+makeGrid(16);
 
 button.addEventListener("click", () => {
-    let size = prompt("max 100")
-    while (size > 100) {
-        size = prompt("max 100")
+    let size = prompt("Enter grid size (max 100):")
+    while (size > 100 || isNaN(size) || size < 1) {
+        size = prompt("Please enter a number between 1 and 100:")
     }
-    let newGridSize = size * size;
-    
-    makeGrid(newGridSize);
+    size = parseInt(size);
+    container.innerHTML = "";
+    makeGrid(size);
 });
-
-
-makeGrid(gridSize);
